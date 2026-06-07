@@ -86,32 +86,38 @@ The dashboard reads `../data/latest.json` relative to `dashboard/`, so the commi
 
 ## Testing locally
 
-### Run just the fetcher (no API keys needed)
+### 1. Create your `.env` file
 
 ```bash
-node src/fetch-news.js
+cp .env.example .env
+```
+
+Open `.env` and paste in your keys — Anthropic, Resend, and the recipient address(es). This file is gitignored and never committed.
+
+### 2. Run just the fetcher (no API keys needed)
+
+```bash
+npm run fetch
 ```
 
 Inspect `data/raw-fetch.json` — verify the feeds are clean and item counts look right.
 
-### Run the full pipeline (requires keys)
+### 3. Run the full pipeline
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-...
-export RESEND_API_KEY=re_...
-export ALERT_RECIPIENTS=you@example.com
-
 npm run pipeline
 ```
 
-Or step by step:
+Or step by step if you want to inspect each stage:
 
 ```bash
-node src/fetch-news.js     # → data/raw-fetch.json
-node src/curate.js         # → data/curated.json
-node src/build-digest.js   # → data/latest.json, data/email.html, data/digests/…
-node src/send-alert.js     # sends the email
+npm run fetch    # → data/raw-fetch.json
+npm run curate   # → data/curated.json  (requires ANTHROPIC_API_KEY)
+npm run build    # → data/latest.json, data/email.html, data/digests/…
+npm run send     # sends the email      (requires RESEND_API_KEY)
 ```
+
+Each script loads `.env` automatically via Node's `--env-file` flag (Node ≥ 20 required).
 
 ### Preview the email without sending
 

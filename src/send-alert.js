@@ -22,7 +22,15 @@ async function run() {
   console.log("━━━ Isabella's Alerts — send-alert ━━━");
 
   if (!process.env.RESEND_API_KEY) {
-    console.error("ERROR: RESEND_API_KEY is not set. Skipping send.");
+    console.error(`
+ERROR: RESEND_API_KEY is not set.
+
+To run locally, add it to your .env file:
+
+  RESEND_API_KEY=re_...
+
+Get your key at: https://resend.com/api-keys
+`);
     process.exit(1);
   }
 

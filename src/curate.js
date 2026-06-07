@@ -103,7 +103,16 @@ async function run() {
   console.log(`Input: ${items.length} raw items fetched at ${fetchedAt}\n`);
 
   if (!process.env.ANTHROPIC_API_KEY) {
-    console.error("ERROR: ANTHROPIC_API_KEY is not set.");
+    console.error(`
+ERROR: ANTHROPIC_API_KEY is not set.
+
+To run locally, create a .env file in the project root:
+
+  cp .env.example .env
+  # then edit .env and paste your key
+
+Get your key at: https://console.anthropic.com/settings/keys
+`);
     process.exit(1);
   }
 

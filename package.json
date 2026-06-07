@@ -4,11 +4,11 @@
   "description": "Isabella's Alerts — the luxury-tech AI briefing",
   "type": "module",
   "scripts": {
-    "fetch": "node src/fetch-news.js",
-    "curate": "node src/curate.js",
-    "build": "node src/build-digest.js",
-    "send": "node src/send-alert.js",
-    "pipeline": "node src/fetch-news.js && node src/curate.js && node src/build-digest.js && node src/send-alert.js"
+    "fetch": "node --env-file=.env src/fetch-news.js",
+    "curate": "node --env-file=.env src/curate.js",
+    "build": "node --env-file=.env src/build-digest.js",
+    "send": "node --env-file=.env src/send-alert.js",
+    "pipeline": "node --env-file=.env src/fetch-news.js && node --env-file=.env src/curate.js && node --env-file=.env src/build-digest.js && node --env-file=.env src/send-alert.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.52.0",
