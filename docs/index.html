@@ -35,13 +35,18 @@
       min-height: 100vh;
     }
 
-    /* ── Layout ── */
     .outer { max-width: 900px; margin: 0 auto; padding: 0 24px; }
 
     /* ── Masthead ── */
     .masthead {
       padding: 56px 0 0;
       border-bottom: 3px solid var(--ink);
+    }
+    .masthead-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
     }
     .masthead-eyebrow {
       font-family: var(--sans);
@@ -71,7 +76,103 @@
       padding-bottom: 28px;
     }
 
-    /* ── Nav bar (archive dates) ── */
+    /* ── Refresh trigger ── */
+    .refresh-trigger {
+      background: none;
+      border: 1px solid var(--rule);
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-ghost);
+      padding: 7px 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 4px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .refresh-trigger:hover { color: var(--gold); border-color: var(--gold-light); }
+    .refresh-trigger.active { color: var(--gold); border-color: var(--gold); }
+
+    /* ── Refresh panel ── */
+    .refresh-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      border-bottom: 1px solid var(--rule);
+    }
+    .refresh-panel.open {
+      max-height: 220px;
+    }
+    .refresh-panel-inner {
+      padding: 20px 0 24px;
+    }
+    .refresh-panel label {
+      display: block;
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-ghost);
+      margin-bottom: 8px;
+    }
+    .refresh-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .refresh-key-input {
+      flex: 1;
+      max-width: 360px;
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--ink);
+      padding: 9px 12px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .refresh-key-input:focus { border-color: var(--gold-light); }
+    .refresh-key-input::placeholder { color: var(--ink-ghost); }
+    .refresh-btn {
+      background: var(--ink);
+      border: none;
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--bg);
+      padding: 10px 18px;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .refresh-btn:hover { background: var(--ink-mid); }
+    .refresh-btn:disabled { background: var(--rule); color: var(--ink-ghost); cursor: not-allowed; }
+    .refresh-note {
+      font-family: var(--sans);
+      font-size: 11px;
+      color: var(--ink-ghost);
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+    .refresh-status {
+      font-family: var(--sans);
+      font-size: 11px;
+      margin-top: 10px;
+      min-height: 18px;
+      line-height: 1.5;
+    }
+    .refresh-status.ok    { color: var(--gold); }
+    .refresh-status.error { color: #9B4040; }
+    .refresh-status.info  { color: var(--ink-ghost); font-style: italic; }
+
+    /* ── Archive nav ── */
     .archive-nav {
       padding: 16px 0;
       border-bottom: 1px solid var(--rule);
@@ -99,9 +200,7 @@
     .archive-btn.active { color: var(--gold); }
 
     /* ── Editor's note ── */
-    .editors-note {
-      padding: 32px 0 0;
-    }
+    .editors-note { padding: 32px 0 0; }
     .editors-note p {
       font-family: var(--serif);
       font-size: 17px;
@@ -112,9 +211,7 @@
     }
 
     /* ── Digest grid ── */
-    .digest {
-      padding: 40px 0 80px;
-    }
+    .digest { padding: 40px 0 80px; }
     .digest-meta {
       font-family: var(--sans);
       font-size: 10px;
@@ -129,18 +226,9 @@
     .card {
       padding: 28px 0;
       border-top: 1px solid var(--rule);
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0;
     }
-    .card:first-child {
-      border-top: none;
-      padding-top: 0;
-    }
-    .card--lead {
-      padding-bottom: 40px;
-      margin-bottom: 8px;
-    }
+    .card:first-child { border-top: none; padding-top: 0; }
+    .card--lead { padding-bottom: 40px; margin-bottom: 8px; }
 
     .card-meta {
       display: flex;
@@ -172,11 +260,7 @@
     }
     .card--lead .card-headline { font-size: clamp(22px, 3.5vw, 30px); }
     .card:not(.card--lead) .card-headline { font-size: 19px; }
-
-    .card-headline a {
-      color: inherit;
-      text-decoration: none;
-    }
+    .card-headline a { color: inherit; text-decoration: none; }
     .card-headline a:hover { color: var(--ink-mid); }
 
     .card-take {
@@ -196,23 +280,19 @@
       letter-spacing: 0.04em;
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 12px;
     }
-    .card-footer a {
-      color: var(--gold);
-      text-decoration: none;
-    }
+    .card-footer a { color: var(--gold); text-decoration: none; }
     .card-footer a:hover { text-decoration: underline; }
     .card-footer-sep { color: var(--rule); }
 
-    /* ── Category colours ── */
     .cat--maisons       { color: #C9A96E; }
     .cat--tooling       { color: #8B7D6B; }
     .cat--commerce      { color: #A0937D; }
     .cat--creative      { color: #B5AA99; }
     .cat--policy        { color: #7A6652; }
 
-    /* ── Empty state ── */
     .empty {
       padding: 80px 0;
       text-align: center;
@@ -227,7 +307,6 @@
     }
     .empty p { font-size: 13px; }
 
-    /* ── Loading ── */
     .loading {
       padding: 80px 0;
       text-align: center;
@@ -237,7 +316,6 @@
       font-size: 18px;
     }
 
-    /* ── Footer ── */
     .site-footer {
       border-top: 3px solid var(--ink);
       padding: 28px 0 48px;
@@ -250,10 +328,11 @@
       text-transform: uppercase;
     }
 
-    /* ── Responsive ── */
     @media (max-width: 600px) {
       .outer { padding: 0 16px; }
       .masthead { padding-top: 36px; }
+      .refresh-row { flex-direction: column; align-items: stretch; }
+      .refresh-key-input { max-width: 100%; }
     }
   </style>
 </head>
@@ -263,10 +342,37 @@
 
   <!-- Masthead -->
   <header class="masthead">
-    <p class="masthead-eyebrow" id="js-date">Loading…</p>
-    <h1 class="masthead-title">ISABELLA'S<br>ALERTS</h1>
-    <p class="masthead-tagline">The luxury-tech briefing</p>
+    <div class="masthead-top">
+      <div>
+        <p class="masthead-eyebrow" id="js-date">Loading…</p>
+        <h1 class="masthead-title">ISABELLA'S<br>ALERTS</h1>
+        <p class="masthead-tagline">The luxury-tech briefing</p>
+      </div>
+      <button class="refresh-trigger" id="js-refresh-trigger" aria-expanded="false">
+        ↻ Refresh
+      </button>
+    </div>
   </header>
+
+  <!-- Refresh panel (hidden until trigger clicked) -->
+  <div class="refresh-panel" id="js-refresh-panel" aria-hidden="true">
+    <div class="refresh-panel-inner">
+      <label for="js-api-key">Anthropic API key</label>
+      <div class="refresh-row">
+        <input
+          type="password"
+          id="js-api-key"
+          class="refresh-key-input"
+          placeholder="sk-ant-…"
+          autocomplete="off"
+          spellcheck="false"
+        >
+        <button class="refresh-btn" id="js-refresh-btn">Fetch latest</button>
+      </div>
+      <p class="refresh-note">Your key is sent directly to Anthropic's API and is never stored or logged.</p>
+      <p class="refresh-status info" id="js-refresh-status"></p>
+    </div>
+  </div>
 
   <!-- Archive navigation -->
   <nav class="archive-nav" id="js-archive-nav" aria-label="Archive"></nav>
@@ -287,11 +393,25 @@
 </div>
 
 <script>
-// ── Config ──────────────────────────────────────────────────────────────────
+// ── Config ────────────────────────────────────────────────────────────────────
 
-// When deployed to GitHub Pages the data files sit at the repo root.
-// Adjust DATA_BASE if you host under a subdirectory.
 const DATA_BASE = "./data";
+
+const CORS_PROXY = "https://api.allorigins.win/raw?url=";
+
+const FEEDS = [
+  { name: "Vogue Business — Technology",   url: "https://www.voguebusiness.com/rss",                                hint: "luxury fashion tech" },
+  { name: "The Business of Fashion",        url: "https://www.businessoffashion.com/rss/",                          hint: "luxury fashion industry" },
+  { name: "WWD",                            url: "https://wwd.com/feed/",                                           hint: "fashion industry news" },
+  { name: "TechCrunch — AI",               url: "https://techcrunch.com/category/artificial-intelligence/feed/",   hint: "AI technology" },
+  { name: "The Verge — AI",                url: "https://www.theverge.com/ai-artificial-intelligence/rss/index.xml", hint: "AI technology" },
+  { name: "Anthropic Blog",                url: "https://www.anthropic.com/rss.xml",                               hint: "AI research and safety" },
+  { name: "OpenAI Blog",                   url: "https://openai.com/blog/rss.xml",                                 hint: "AI research" },
+  { name: "Google DeepMind Blog",          url: "https://deepmind.google/blog/rss.xml",                            hint: "AI research" },
+];
+
+const RELEVANCE_THRESHOLD = 3;
+const ANTHROPIC_MODEL = "claude-sonnet-4-5";
 
 const CATEGORY_CLASS = {
   "Maisons & Brands":     "cat--maisons",
@@ -301,59 +421,159 @@ const CATEGORY_CLASS = {
   "Policy & Risk":        "cat--policy",
 };
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// ── Editorial curation prompt (mirrors src/curate.js) ────────────────────────
+
+const CURATE_SYSTEM_PROMPT = `You are the curation engine for Isabella's Alerts — a sharp, opinionated luxury-tech intelligence briefing. Isabella is a well-connected editor who covers the intersection of generative AI and the luxury, fashion, beauty, and premium retail industries.
+
+Your job: review raw RSS items and decide which ones belong in today's digest.
+
+KEEP an item if it is genuinely about generative AI (or closely related AI tooling) AND at least one of: luxury goods, fashion, beauty, premium retail, creative production for maisons, or regulatory/IP risk specific to the luxury-AI nexus.
+
+DISCARD an item if it is:
+- Generic AI news with no luxury/fashion angle
+- Generic fashion/retail news with no generative AI angle
+- Purely financial or M&A news unless the AI-luxury angle is the story
+- Speculation, opinion, or hot-takes with no new factual development
+
+For each KEPT item, write in Isabella's voice: confident, elegant, lightly opinionated. She does not use buzzwords. She does not write "delve". She writes for a reader who already knows what an LLM is.
+
+Return a JSON array (no markdown, no prose outside the JSON). Each element:
+{
+  "id": "<original item id>",
+  "keep": true,
+  "headline": "<Isabella's rewrite — punchy, max 90 chars>",
+  "take": "<2–3 sentence Isabella take on why this matters for luxury. First person plural is fine. No em-dash overuse.>",
+  "category": "<one of: Maisons & Brands | AI Tooling | Commerce & Retail | Creative & Campaigns | Policy & Risk>",
+  "score": <integer 1–5, where 5 = must-read for anyone in luxury-AI>
+}
+
+For DISCARDED items, include only: { "id": "<id>", "keep": false }
+
+Be strict. Isabella has taste. A weak story in the digest is worse than a short one.`;
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 function fmt(dateStr) {
   return new Date(dateStr).toLocaleDateString("en-GB", {
     weekday: "long", year: "numeric", month: "long", day: "numeric",
   });
 }
-
 function fmtShort(dateStr) {
-  return new Date(dateStr).toLocaleDateString("en-GB", {
-    day: "numeric", month: "short",
-  });
+  return new Date(dateStr).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
 }
-
 function scoreHtml(n) {
-  const filled = "■".repeat(n);
-  const empty  = "□".repeat(5 - n);
-  return `<span>${filled}</span>${empty}`;
+  return `<span>${"■".repeat(n)}</span>${"□".repeat(5 - n)}`;
 }
-
 function editorsNote(items, date) {
   if (!items || items.length === 0) return "A quiet day — nothing cleared the bar. Back tomorrow.";
-
   const counts = {};
   for (const it of items) counts[it.category] = (counts[it.category] || 0) + 1;
   const topCat = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "the industry";
   const lead = items[0];
-
   if (items.length === 1) return `One story worth your attention today, and it concerns ${topCat.toLowerCase()}. Quality over quantity.`;
   return `${fmt(date)}. ${items.length} stories cleared the bar today — the lead, scoring ${lead.score}/5, concerns ${(lead.category || "").toLowerCase()} and deserves the first read. ${topCat} dominated the day's signal.`;
 }
 
-// ── Render ───────────────────────────────────────────────────────────────────
+function extractJSON(text) {
+  const stripped = text.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "").trim();
+  try { return JSON.parse(stripped); } catch { /* fall through */ }
+  const match = stripped.match(/\[[\s\S]*\]/);
+  if (match) return JSON.parse(match[0]);
+  throw new Error("Could not extract JSON from model response");
+}
+
+// ── RSS fetch + parse (browser-side via CORS proxy) ───────────────────────────
+
+async function fetchFeed(feed) {
+  const url = CORS_PROXY + encodeURIComponent(feed.url);
+  const res = await fetch(url, { signal: AbortSignal.timeout(12000) });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.text();
+}
+
+function parseRSSItems(xmlText, feedName, hint) {
+  const doc = new DOMParser().parseFromString(xmlText, "text/xml");
+  const isAtom = !!doc.querySelector("feed");
+  const itemEls = [...doc.querySelectorAll(isAtom ? "entry" : "item")];
+  const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+  return itemEls.map(el => {
+    const title = el.querySelector("title")?.textContent?.trim() || "";
+    const link = isAtom
+      ? (el.querySelector("link[rel='alternate']")?.getAttribute("href") || el.querySelector("link")?.getAttribute("href") || "")
+      : (el.querySelector("link")?.textContent?.trim() || "");
+    const pubDateStr = el.querySelector(isAtom ? "published, updated" : "pubDate")?.textContent || "";
+    const rawSummary = el.querySelector(
+      isAtom ? "summary, content" : "description, content\\:encoded"
+    )?.textContent || "";
+    const summary = rawSummary.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 500);
+    const pubDate = pubDateStr ? new Date(pubDateStr) : null;
+    return {
+      id:          link || title,
+      title,
+      link,
+      pubDate:     pubDate?.toISOString() || null,
+      summary,
+      source:      feedName,
+      sourceHint:  hint,
+    };
+  }).filter(item => !item.pubDate || new Date(item.pubDate) >= cutoff);
+}
+
+// ── Anthropic API call (direct from browser) ──────────────────────────────────
+
+async function curateWithClaude(apiKey, items) {
+  const BATCH = 8;
+  const results = [];
+
+  for (let i = 0; i < items.length; i += BATCH) {
+    const batch = items.slice(i, i + BATCH);
+    const userContent = "Here are today's raw RSS items. Curate them for Isabella's Alerts.\n\n"
+      + batch.map((it, j) =>
+          `[${j + 1}] SOURCE: ${it.source}\nTITLE: ${it.title}\nSUMMARY: ${it.summary || "(none)"}\nURL: ${it.link}`
+        ).join("\n\n---\n\n");
+
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true",
+      },
+      body: JSON.stringify({
+        model: ANTHROPIC_MODEL,
+        max_tokens: 4096,
+        system: CURATE_SYSTEM_PROMPT,
+        messages: [{ role: "user", content: userContent }],
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err?.error?.message || `Anthropic API error ${res.status}`);
+    }
+    const data = await res.json();
+    const parsed = extractJSON(data.content[0]?.text || "[]");
+    results.push(...parsed);
+  }
+  return results;
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
 
 function renderDigest(data) {
   const { items, digestDate } = data;
-
   document.getElementById("js-date").textContent = fmt(digestDate);
-
-  // Editor's note
-  const noteEl = document.getElementById("js-editors-note");
-  noteEl.innerHTML = `<p>${editorsNote(items, digestDate)}</p>`;
+  document.getElementById("js-editors-note").innerHTML = `<p>${editorsNote(items, digestDate)}</p>`;
 
   const digestEl = document.getElementById("js-digest");
-
   if (!items || items.length === 0) {
     digestEl.innerHTML = `<div class="empty"><h2>Nothing today.</h2><p>Isabella found no stories worthy of your attention. Check back tomorrow.</p></div>`;
     return;
   }
 
-  const formatted = fmt(digestDate);
-  const meta = `<p class="digest-meta">${formatted} &nbsp;·&nbsp; ${items.length} stor${items.length === 1 ? "y" : "ies"}</p>`;
-
+  const meta = `<p class="digest-meta">${fmt(digestDate)} &nbsp;·&nbsp; ${items.length} stor${items.length === 1 ? "y" : "ies"}</p>`;
   const cards = items.map((item, i) => {
     const catClass = CATEGORY_CLASS[item.category] || "";
     const isLead = i === 0;
@@ -362,7 +582,7 @@ function renderDigest(data) {
     <article class="card${isLead ? " card--lead" : ""}">
       <div class="card-meta">
         <span class="card-category ${catClass}">${item.category || ""}</span>
-        <span class="card-score" aria-label="Relevance score ${item.score} of 5">${scoreHtml(item.score || 3)}</span>
+        <span class="card-score" aria-label="Relevance ${item.score} of 5">${scoreHtml(item.score || 3)}</span>
       </div>
       <h2 class="card-headline">
         <a href="${item.link}" target="_blank" rel="noopener">${item.headline || item.title}</a>
@@ -376,7 +596,6 @@ function renderDigest(data) {
       </div>
     </article>`;
   }).join("");
-
   digestEl.innerHTML = meta + cards;
 }
 
@@ -388,40 +607,128 @@ async function loadArchiveNav(currentDate) {
   try {
     const res = await fetch(`${DATA_BASE}/archive-index.json`);
     if (res.ok) dates = await res.json();
-  } catch { /* archive not available yet */ }
-
+  } catch { /* first run */ }
   if (dates.length <= 1) { nav.style.display = "none"; return; }
-
   nav.innerHTML = dates.slice(0, 14).map(d =>
     `<button class="archive-btn${d === currentDate ? " active" : ""}" data-date="${d}">
-      ${new Date(d).toLocaleDateString("en-GB", { day:"numeric", month:"short" })}
+      ${new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
     </button>`
   ).join("");
-
   nav.querySelectorAll(".archive-btn").forEach(btn => {
     btn.addEventListener("click", () => loadDigest(btn.dataset.date));
   });
 }
 
-// ── Data loading ──────────────────────────────────────────────────────────────
+// ── Load stored digest ────────────────────────────────────────────────────────
 
 async function loadDigest(date) {
   const digestEl = document.getElementById("js-digest");
   digestEl.innerHTML = `<p class="loading">Loading…</p>`;
-
   try {
-    const url = date
-      ? `${DATA_BASE}/digests/${date}.json`
-      : `${DATA_BASE}/latest.json`;
+    const url = date ? `${DATA_BASE}/digests/${date}.json` : `${DATA_BASE}/latest.json`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     renderDigest(data);
     await loadArchiveNav(data.digestDate);
   } catch (err) {
-    digestEl.innerHTML = `<div class="empty"><h2>No digest available.</h2><p>The pipeline may not have run yet, or data/latest.json is missing.<br><small style="opacity:.6">${err.message}</small></p></div>`;
+    digestEl.innerHTML = `<div class="empty"><h2>No digest available.</h2>
+      <p>Use the Refresh button above to fetch and curate today's news.<br>
+      <small style="opacity:.6">${err.message}</small></p></div>`;
   }
 }
+
+// ── Browser pipeline ──────────────────────────────────────────────────────────
+
+function setStatus(msg, type = "info") {
+  const el = document.getElementById("js-refresh-status");
+  el.textContent = msg;
+  el.className = `refresh-status ${type}`;
+}
+
+async function runPipeline(apiKey) {
+  const btn = document.getElementById("js-refresh-btn");
+  btn.disabled = true;
+
+  try {
+    // 1. Fetch all feeds
+    const allItems = [];
+    const seen = new Set();
+    let fetched = 0;
+
+    setStatus(`Fetching feeds (0 / ${FEEDS.length})…`);
+    await Promise.allSettled(FEEDS.map(async feed => {
+      try {
+        const xml = await fetchFeed(feed);
+        const items = parseRSSItems(xml, feed.name, feed.hint);
+        for (const item of items) {
+          const key = (item.link || item.title).toLowerCase();
+          if (key && !seen.has(key)) { seen.add(key); allItems.push(item); }
+        }
+      } catch { /* skip unreachable feed */ }
+      fetched++;
+      setStatus(`Fetching feeds (${fetched} / ${FEEDS.length})…`);
+    }));
+
+    if (allItems.length === 0) {
+      setStatus("No articles found in the last 24 hours. Feeds may be rate-limiting the proxy.", "error");
+      return;
+    }
+
+    setStatus(`Curating ${allItems.length} articles with Claude…`);
+
+    // 2. Curate with Claude
+    const results = await curateWithClaude(apiKey, allItems);
+
+    // 3. Merge, filter, sort
+    const itemMap = Object.fromEntries(allItems.map(it => [it.id, it]));
+    const kept = results
+      .filter(r => r.keep && (r.score ?? 0) >= RELEVANCE_THRESHOLD)
+      .map(r => ({ ...itemMap[r.id], headline: r.headline, take: r.take, category: r.category, score: r.score }))
+      .filter(it => it.title)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 12);
+
+    if (kept.length === 0) {
+      setStatus("Claude found nothing that cleared the bar today. Try again tomorrow.", "info");
+      return;
+    }
+
+    // 4. Render
+    const today = new Date().toISOString().slice(0, 10);
+    renderDigest({ items: kept, digestDate: today, itemCount: kept.length });
+    setStatus(`Done — ${kept.length} stor${kept.length === 1 ? "y" : "ies"} curated live.`, "ok");
+
+  } catch (err) {
+    const msg = err.message.includes("authentication") || err.message.includes("401")
+      ? "Authentication failed — check your API key."
+      : `Error: ${err.message}`;
+    setStatus(msg, "error");
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// ── Refresh panel toggle ──────────────────────────────────────────────────────
+
+document.getElementById("js-refresh-trigger").addEventListener("click", function () {
+  const panel = document.getElementById("js-refresh-panel");
+  const open = panel.classList.toggle("open");
+  this.setAttribute("aria-expanded", open);
+  this.classList.toggle("active", open);
+  panel.setAttribute("aria-hidden", !open);
+  if (open) document.getElementById("js-api-key").focus();
+});
+
+document.getElementById("js-refresh-btn").addEventListener("click", () => {
+  const key = document.getElementById("js-api-key").value.trim();
+  if (!key) { setStatus("Please enter your Anthropic API key.", "error"); return; }
+  runPipeline(key);
+});
+
+document.getElementById("js-api-key").addEventListener("keydown", e => {
+  if (e.key === "Enter") document.getElementById("js-refresh-btn").click();
+});
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
 
