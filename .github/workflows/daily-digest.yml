@@ -1,0 +1,76 @@
+name: Isabella's Alerts — Daily Digest
+
+on:
+  schedule:
+    # 8:00 AM ET = 13:00 UTC
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+    inputs:
+      skip_send:
+        description: "Skip email send (dry run)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # ── Step 1: Fetch RSS feeds ──────────────────────────────────────────────
+      - name: Fetch news
+        run: node src/fetch-news.js
+
+      # ── Step 2: Curate with Anthropic API ───────────────────────────────────
+      - name: Curate with Claude
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node src/curate.js
+
+      # ── Step 3: Build HTML email + digest JSON ───────────────────────────────
+      - name: Build digest
+        run: node src/build-digest.js
+
+      # ── Step 4: Send email (skip on dry runs) ────────────────────────────────
+      - name: Send email
+        if: ${{ !inputs.skip_send }}
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERT_RECIPIENTS: ${{ secrets.ALERT_RECIPIENTS }}
+        run: node src/send-alert.js
+
+      # ── Step 5: Commit updated digest data back to repo ──────────────────────
+      - name: Commit digest data
+        run: |
+          git config user.name  "Isabella's Alerts"
+          git config user.email "alerts-bot@users.noreply.github.com"
+
+          # Stage only the data files, never secrets or node_modules
+          git add data/latest.json data/archive-index.json
+          git add "data/digests/*.json" || true
+
+          # Only commit if there is something to commit
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            DATE=$(node -e "console.log(new Date().toISOString().slice(0,10))")
+            git commit -m "digest: ${DATE}"
+            git push origin HEAD
+          fi

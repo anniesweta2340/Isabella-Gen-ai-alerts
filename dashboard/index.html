@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Isabella's Alerts — The luxury-tech briefing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:        #1A1714;
+      --ink-mid:    #3D3530;
+      --ink-soft:   #7A6E65;
+      --ink-ghost:  #9E9188;
+      --gold:       #C9A96E;
+      --gold-light: #DDD0BB;
+      --rule:       #E8E2D9;
+      --bg:         #F8F5EF;
+      --paper:      #FDFCF9;
+      --serif:      'Cormorant Garamond', Georgia, serif;
+      --sans:       'Inter', system-ui, sans-serif;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 400;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Layout ── */
+    .outer { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Masthead ── */
+    .masthead {
+      padding: 56px 0 0;
+      border-bottom: 3px solid var(--ink);
+    }
+    .masthead-eyebrow {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-ghost);
+      margin-bottom: 10px;
+    }
+    .masthead-title {
+      font-family: var(--serif);
+      font-size: clamp(42px, 7vw, 72px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.0;
+      color: var(--ink);
+    }
+    .masthead-tagline {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-ghost);
+      margin-top: 10px;
+      padding-bottom: 28px;
+    }
+
+    /* ── Nav bar (archive dates) ── */
+    .archive-nav {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .archive-nav::-webkit-scrollbar { display: none; }
+    .archive-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-ghost);
+      padding: 6px 14px 6px 0;
+      white-space: nowrap;
+      transition: color 0.15s;
+    }
+    .archive-btn:hover { color: var(--ink-mid); }
+    .archive-btn.active { color: var(--gold); }
+
+    /* ── Editor's note ── */
+    .editors-note {
+      padding: 32px 0 0;
+    }
+    .editors-note p {
+      font-family: var(--serif);
+      font-size: 17px;
+      font-style: italic;
+      line-height: 1.75;
+      color: var(--ink-mid);
+      max-width: 680px;
+    }
+
+    /* ── Digest grid ── */
+    .digest {
+      padding: 40px 0 80px;
+    }
+    .digest-meta {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-ghost);
+      margin-bottom: 24px;
+    }
+
+    /* ── Cards ── */
+    .card {
+      padding: 28px 0;
+      border-top: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .card:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+    .card--lead {
+      padding-bottom: 40px;
+      margin-bottom: 8px;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .card-category {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .card-score {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: var(--gold-light);
+      letter-spacing: 0.06em;
+    }
+    .card-score span { color: var(--gold); }
+
+    .card-headline {
+      font-family: var(--serif);
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 12px;
+    }
+    .card--lead .card-headline { font-size: clamp(22px, 3.5vw, 30px); }
+    .card:not(.card--lead) .card-headline { font-size: 19px; }
+
+    .card-headline a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .card-headline a:hover { color: var(--ink-mid); }
+
+    .card-take {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--ink-mid);
+      margin-bottom: 12px;
+      max-width: 700px;
+    }
+
+    .card-footer {
+      font-family: var(--sans);
+      font-size: 11px;
+      color: var(--ink-ghost);
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .card-footer a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .card-footer a:hover { text-decoration: underline; }
+    .card-footer-sep { color: var(--rule); }
+
+    /* ── Category colours ── */
+    .cat--maisons       { color: #C9A96E; }
+    .cat--tooling       { color: #8B7D6B; }
+    .cat--commerce      { color: #A0937D; }
+    .cat--creative      { color: #B5AA99; }
+    .cat--policy        { color: #7A6652; }
+
+    /* ── Empty state ── */
+    .empty {
+      padding: 80px 0;
+      text-align: center;
+      color: var(--ink-ghost);
+    }
+    .empty h2 {
+      font-family: var(--serif);
+      font-size: 24px;
+      font-style: italic;
+      font-weight: 400;
+      margin-bottom: 12px;
+    }
+    .empty p { font-size: 13px; }
+
+    /* ── Loading ── */
+    .loading {
+      padding: 80px 0;
+      text-align: center;
+      color: var(--ink-ghost);
+      font-style: italic;
+      font-family: var(--serif);
+      font-size: 18px;
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      border-top: 3px solid var(--ink);
+      padding: 28px 0 48px;
+    }
+    .site-footer p {
+      font-family: var(--sans);
+      font-size: 11px;
+      color: var(--ink-ghost);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .outer { padding: 0 16px; }
+      .masthead { padding-top: 36px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="outer">
+
+  <!-- Masthead -->
+  <header class="masthead">
+    <p class="masthead-eyebrow" id="js-date">Loading…</p>
+    <h1 class="masthead-title">ISABELLA'S<br>ALERTS</h1>
+    <p class="masthead-tagline">The luxury-tech briefing</p>
+  </header>
+
+  <!-- Archive navigation -->
+  <nav class="archive-nav" id="js-archive-nav" aria-label="Archive"></nav>
+
+  <!-- Main content -->
+  <main>
+    <section class="editors-note" id="js-editors-note"></section>
+    <section class="digest" id="js-digest">
+      <p class="loading">Fetching today's intelligence…</p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>Isabella's Alerts &nbsp;·&nbsp; The luxury-tech briefing &nbsp;·&nbsp; Updated daily</p>
+  </footer>
+
+</div>
+
+<script>
+// ── Config ──────────────────────────────────────────────────────────────────
+
+// When deployed to GitHub Pages the data files sit at the repo root.
+// Adjust DATA_BASE if you host under a subdirectory.
+const DATA_BASE = "./data";
+
+const CATEGORY_CLASS = {
+  "Maisons & Brands":     "cat--maisons",
+  "AI Tooling":           "cat--tooling",
+  "Commerce & Retail":    "cat--commerce",
+  "Creative & Campaigns": "cat--creative",
+  "Policy & Risk":        "cat--policy",
+};
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function fmt(dateStr) {
+  return new Date(dateStr).toLocaleDateString("en-GB", {
+    weekday: "long", year: "numeric", month: "long", day: "numeric",
+  });
+}
+
+function fmtShort(dateStr) {
+  return new Date(dateStr).toLocaleDateString("en-GB", {
+    day: "numeric", month: "short",
+  });
+}
+
+function scoreHtml(n) {
+  const filled = "■".repeat(n);
+  const empty  = "□".repeat(5 - n);
+  return `<span>${filled}</span>${empty}`;
+}
+
+function editorsNote(items, date) {
+  if (!items || items.length === 0) return "A quiet day — nothing cleared the bar. Back tomorrow.";
+
+  const counts = {};
+  for (const it of items) counts[it.category] = (counts[it.category] || 0) + 1;
+  const topCat = Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "the industry";
+  const lead = items[0];
+
+  if (items.length === 1) return `One story worth your attention today, and it concerns ${topCat.toLowerCase()}. Quality over quantity.`;
+  return `${fmt(date)}. ${items.length} stories cleared the bar today — the lead, scoring ${lead.score}/5, concerns ${(lead.category || "").toLowerCase()} and deserves the first read. ${topCat} dominated the day's signal.`;
+}
+
+// ── Render ───────────────────────────────────────────────────────────────────
+
+function renderDigest(data) {
+  const { items, digestDate } = data;
+
+  document.getElementById("js-date").textContent = fmt(digestDate);
+
+  // Editor's note
+  const noteEl = document.getElementById("js-editors-note");
+  noteEl.innerHTML = `<p>${editorsNote(items, digestDate)}</p>`;
+
+  const digestEl = document.getElementById("js-digest");
+
+  if (!items || items.length === 0) {
+    digestEl.innerHTML = `<div class="empty"><h2>Nothing today.</h2><p>Isabella found no stories worthy of your attention. Check back tomorrow.</p></div>`;
+    return;
+  }
+
+  const formatted = fmt(digestDate);
+  const meta = `<p class="digest-meta">${formatted} &nbsp;·&nbsp; ${items.length} stor${items.length === 1 ? "y" : "ies"}</p>`;
+
+  const cards = items.map((item, i) => {
+    const catClass = CATEGORY_CLASS[item.category] || "";
+    const isLead = i === 0;
+    const pubStr = item.pubDate ? fmtShort(item.pubDate) : "";
+    return `
+    <article class="card${isLead ? " card--lead" : ""}">
+      <div class="card-meta">
+        <span class="card-category ${catClass}">${item.category || ""}</span>
+        <span class="card-score" aria-label="Relevance score ${item.score} of 5">${scoreHtml(item.score || 3)}</span>
+      </div>
+      <h2 class="card-headline">
+        <a href="${item.link}" target="_blank" rel="noopener">${item.headline || item.title}</a>
+      </h2>
+      <p class="card-take">${item.take || ""}</p>
+      <div class="card-footer">
+        <span>${item.source || ""}</span>
+        ${pubStr ? `<span class="card-footer-sep">·</span><span>${pubStr}</span>` : ""}
+        <span class="card-footer-sep">·</span>
+        <a href="${item.link}" target="_blank" rel="noopener">Read →</a>
+      </div>
+    </article>`;
+  }).join("");
+
+  digestEl.innerHTML = meta + cards;
+}
+
+// ── Archive nav ───────────────────────────────────────────────────────────────
+
+async function loadArchiveNav(currentDate) {
+  const nav = document.getElementById("js-archive-nav");
+  let dates = [];
+  try {
+    const res = await fetch(`${DATA_BASE}/archive-index.json`);
+    if (res.ok) dates = await res.json();
+  } catch { /* archive not available yet */ }
+
+  if (dates.length <= 1) { nav.style.display = "none"; return; }
+
+  nav.innerHTML = dates.slice(0, 14).map(d =>
+    `<button class="archive-btn${d === currentDate ? " active" : ""}" data-date="${d}">
+      ${new Date(d).toLocaleDateString("en-GB", { day:"numeric", month:"short" })}
+    </button>`
+  ).join("");
+
+  nav.querySelectorAll(".archive-btn").forEach(btn => {
+    btn.addEventListener("click", () => loadDigest(btn.dataset.date));
+  });
+}
+
+// ── Data loading ──────────────────────────────────────────────────────────────
+
+async function loadDigest(date) {
+  const digestEl = document.getElementById("js-digest");
+  digestEl.innerHTML = `<p class="loading">Loading…</p>`;
+
+  try {
+    const url = date
+      ? `${DATA_BASE}/digests/${date}.json`
+      : `${DATA_BASE}/latest.json`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    renderDigest(data);
+    await loadArchiveNav(data.digestDate);
+  } catch (err) {
+    digestEl.innerHTML = `<div class="empty"><h2>No digest available.</h2><p>The pipeline may not have run yet, or data/latest.json is missing.<br><small style="opacity:.6">${err.message}</small></p></div>`;
+  }
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+
+loadDigest(null);
+</script>
+
+</body>
+</html>
