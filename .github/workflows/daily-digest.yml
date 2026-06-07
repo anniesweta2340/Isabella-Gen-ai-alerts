@@ -57,16 +57,16 @@ jobs:
         run: node src/send-alert.js
 
       # ── Step 5: Commit updated digest data back to repo ──────────────────────
+      # build-digest.js writes to docs/data/ which GitHub Pages serves.
       - name: Commit digest data
         run: |
           git config user.name  "Isabella's Alerts"
           git config user.email "alerts-bot@users.noreply.github.com"
 
-          # Stage only the data files, never secrets or node_modules
-          git add data/latest.json data/archive-index.json
-          git add "data/digests/*.json" || true
+          git add docs/data/latest.json
+          git add docs/data/archive-index.json
+          git add "docs/data/digests/" || true
 
-          # Only commit if there is something to commit
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else

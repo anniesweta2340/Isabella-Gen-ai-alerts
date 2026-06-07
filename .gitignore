@@ -1,5 +1,12 @@
 node_modules/
 .env
 .env.local
+
+# Pipeline intermediaries — transient, never committed
 data/raw-fetch.json
+data/curated.json
+data/email.html
+
+# docs/data/ is intentionally tracked (GitHub Pages serves it)
+
 *.log

@@ -2,12 +2,12 @@
  * build-digest.js
  *
  * Reads data/curated.json, builds:
- *   1. data/digests/YYYY-MM-DD.json  — the dated archive entry
- *   2. data/latest.json              — symlinked/overwritten for the dashboard
- *   3. data/archive-index.json       — ordered list of all digest dates
- *   4. An HTML email string (returned and also saved to data/email.html for preview)
+ *   1. docs/data/digests/YYYY-MM-DD.json  — dated archive entry (committed, served by GH Pages)
+ *   2. docs/data/latest.json              — current digest (committed, dashboard reads this)
+ *   3. docs/data/archive-index.json       — ordered list of digest dates (committed)
+ *   4. data/email.html                    — email preview (transient, gitignored)
  *
- * Run standalone:  node src/build-digest.js
+ * Run standalone:  node --env-file=.env src/build-digest.js
  */
 
 import fs from "fs/promises";
@@ -15,10 +15,12 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const CURATED_PATH = path.join(__dirname, "../data/curated.json");
-const DIGESTS_DIR = path.join(__dirname, "../data/digests");
-const LATEST_PATH = path.join(__dirname, "../data/latest.json");
-const ARCHIVE_INDEX_PATH = path.join(__dirname, "../data/archive-index.json");
+const CURATED_PATH    = path.join(__dirname, "../data/curated.json");
+// Published outputs → docs/data/ (committed, served via GitHub Pages)
+const DIGESTS_DIR     = path.join(__dirname, "../docs/data/digests");
+const LATEST_PATH     = path.join(__dirname, "../docs/data/latest.json");
+const ARCHIVE_INDEX_PATH = path.join(__dirname, "../docs/data/archive-index.json");
+// Transient preview → data/ (gitignored, local only)
 const EMAIL_PREVIEW_PATH = path.join(__dirname, "../data/email.html");
 
 // ── Category colour accents (used in HTML email) ───────────────────────────────
@@ -178,11 +180,11 @@ async function run() {
   // 1. Dated archive entry
   const datedPath = path.join(DIGESTS_DIR, `${digestDate}.json`);
   await fs.writeFile(datedPath, JSON.stringify(curated, null, 2));
-  console.log(`  Wrote dated digest: data/digests/${digestDate}.json`);
+  console.log(`  Wrote dated digest: docs/data/digests/${digestDate}.json`);
 
   // 2. latest.json (dashboard reads this)
   await fs.writeFile(LATEST_PATH, JSON.stringify(curated, null, 2));
-  console.log("  Wrote data/latest.json");
+  console.log("  Wrote docs/data/latest.json");
 
   // 3. Archive index
   let archiveIndex = [];
@@ -194,7 +196,7 @@ async function run() {
     archiveIndex.unshift(digestDate);
     archiveIndex = archiveIndex.slice(0, 90); // keep 90 days
     await fs.writeFile(ARCHIVE_INDEX_PATH, JSON.stringify(archiveIndex, null, 2));
-    console.log(`  Updated archive index (${archiveIndex.length} entries)`);
+    console.log(`  Updated docs/data/archive-index.json (${archiveIndex.length} entries)`);
   }
 
   // 4. HTML email (also write preview file)
